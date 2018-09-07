@@ -10,10 +10,11 @@ object SimpleApp {
   def main(args: Array[String]) {
     val logFile = "/Users/Shiv/Desktop/test.txt" // Should be some file on your system
     val spark = SparkSession.builder.appName("Simple Application").getOrCreate()
-    val logData = spark.read.textFile(logFile).cache()
-    val numAs = logData.filter(line => line.contains("a")).count()
-    val numBs = logData.filter(line => line.contains("b")).count()
-    println(s"Lines with a: $numAs, Lines with b: $numBs")
+    val logData = spark.read.textFile(logFile)
+
+    val bro = logData.rdd.map(line => line.split(" ").size).reduce((a, b) =>  a + b)
+    println(s"Total Number of words: $bro")
+
     spark.stop()
   }
 }
